@@ -1,4 +1,4 @@
-package com.tchnte.codingtask
+package com.tchnte.codingtask.views
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
+import com.tchnte.codingtask.R
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
