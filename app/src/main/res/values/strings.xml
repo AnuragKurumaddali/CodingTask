@@ -9,4 +9,12 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string name="user_id">User Id</string>
+    <string name="user_name">User Name</string>
+    <string name="user_email">Email Id</string>
+    <string name="user_gender">Gender</string>
+    <string name="user_status">Status</string>
+    <string name="add_to_database">ADD TO DATABASE</string>
+    <string name="cntnue">Continue</string>
 </resources>
