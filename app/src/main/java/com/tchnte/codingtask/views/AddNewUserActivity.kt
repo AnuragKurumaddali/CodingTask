@@ -31,12 +31,9 @@ class AddNewUserActivity : AppCompatActivity() {
         rg_Gender.setOnCheckedChangeListener { group, ID ->
             when (ID) {
                 R.id.rbMale -> {
-
-                    //If you Salected Male
                     selGender = "Male"
                 }
                 R.id.rbFemale -> {
-                    //If you Salected Female
                     selGender = "Female"
                 }
             }
@@ -45,12 +42,9 @@ class AddNewUserActivity : AppCompatActivity() {
         rg_Status.setOnCheckedChangeListener { group, ID ->
             when (ID) {
                 R.id.rbActive -> {
-
-                    //If you Salected Male
                     selStatus = "Active"
                 }
                 R.id.rbInActive -> {
-                    //If you Salected Female
                     selStatus = "Inactive"
                 }
             }
@@ -82,15 +76,15 @@ class AddNewUserActivity : AppCompatActivity() {
                     getTimeStamp()
                 )
 
-            var lsEntity =  database!!.getUserDao().getUserById(userDao!!.id)
-            if (lsEntity.isEmpty()) {
-                var effectedRowsCount = database!!.getUserDao().insert(userDao!!)
-                if (!effectedRowsCount.equals(0))
+            var lsEntity =  database?.getUserDao()?.getUserById(userDao?.id)
+            if (lsEntity?.isEmpty()!!) {
+                var effectedRowsCount = database?.getUserDao()?.insert(userDao!!)
+                if (!effectedRowsCount?.equals(0)!!)
                     showToast("Details Inserted Successfully")
                 finish()
             } else {
-                var effectedRowsCount = database!!.getUserDao().update(userDao!!)
-                if (!effectedRowsCount.equals(0))
+                var effectedRowsCount = database?.getUserDao()?.update(userDao!!)
+                if (!effectedRowsCount?.equals(0)!!)
                     showToast("Details Updated Successfully")
                 finish()
             }
@@ -110,22 +104,16 @@ class AddNewUserActivity : AppCompatActivity() {
 
     private fun isInputValidated():String{
         var emptyStr = ""
-        emptyStr = if(TextUtils.isEmpty(etId.text) && TextUtils.isEmpty(etName.text) && TextUtils.isEmpty(etEmail.text) && TextUtils.isEmpty(selGender) && TextUtils.isEmpty(selStatus))
-            "Please Insert Data Into All fields"
-        else if(TextUtils.isEmpty(etId.text))
-            "Please enter UserId"
-        else if(TextUtils.isEmpty(etName.text))
-            "Please enter UserName"
-        else if(TextUtils.isEmpty(etEmail.text))
-            "Please enter EmailId"
-        else if(TextUtils.isEmpty(selGender))
-            "Please select Gender"
-        else if(TextUtils.isEmpty(selStatus))
-            "Please select Status"
-        else  if (!etEmail.text.toString().trim().matches(emailPattern))
-            "Please enter valid Email Address"
-        else
-            ""
+        emptyStr = when {
+            TextUtils.isEmpty(etId.text) && TextUtils.isEmpty(etName.text) && TextUtils.isEmpty(etEmail.text) && TextUtils.isEmpty(selGender) && TextUtils.isEmpty(selStatus) -> "Please Insert Data Into All fields"
+            TextUtils.isEmpty(etId.text) -> "Please enter UserId"
+            TextUtils.isEmpty(etName.text) -> "Please enter UserName"
+            TextUtils.isEmpty(etEmail.text) -> "Please enter EmailId"
+            TextUtils.isEmpty(selGender) -> "Please select Gender"
+            TextUtils.isEmpty(selStatus) -> "Please select Status"
+            !etEmail.text.toString().trim().matches(emailPattern) -> "Please enter valid Email Address"
+            else -> ""
+        }
         return emptyStr
     }
 

@@ -38,7 +38,7 @@ class UserListAdapter(lsUserEntitys: MutableList<UserEntity>?, itemClickListener
 
     override fun getItemViewType(position: Int): Int {
         return if (isLoaderVisible) {
-            if (position == mUserEntity!!.size - 1) VIEW_TYPE_LOADING else VIEW_TYPE_NORMAL
+            if (position == mUserEntity?.size!! - 1) VIEW_TYPE_LOADING else VIEW_TYPE_NORMAL
         } else {
             VIEW_TYPE_NORMAL
         }
@@ -49,19 +49,19 @@ class UserListAdapter(lsUserEntitys: MutableList<UserEntity>?, itemClickListener
     }
 
     fun addItems(mUserEntity: List<UserEntity>?) {
-        this.mUserEntity!!.addAll(mUserEntity!!)
+        this.mUserEntity?.addAll(mUserEntity!!)
         notifyDataSetChanged()
     }
 
     fun addLoading() {
         isLoaderVisible = true
-        mUserEntity!!.add(UserEntity(0,"","","","","",""))
-        notifyItemInserted(mUserEntity.size - 1)
+        mUserEntity?.add(UserEntity(0,"","","","","",""))
+        notifyItemInserted(mUserEntity?.size!! - 1)
     }
 
     fun removeLoading() {
         isLoaderVisible = false
-        val position = mUserEntity!!.size - 1
+        val position = mUserEntity?.size!! - 1
         val item: UserEntity? = getItem(position)
         if (item != null) {
             mUserEntity.removeAt(position)
@@ -70,7 +70,7 @@ class UserListAdapter(lsUserEntitys: MutableList<UserEntity>?, itemClickListener
     }
 
     fun clear() {
-        mUserEntity!!.clear()
+        mUserEntity?.clear()
         notifyDataSetChanged()
     }
 
@@ -90,17 +90,17 @@ class UserListAdapter(lsUserEntitys: MutableList<UserEntity>?, itemClickListener
         var tv_Gender: TextView? = null
         var ll_listItem: LinearLayout? = null
         override fun clear() {}
-        override fun onBind(position: Int) {
+        override fun onBind(position: Int?) {
             super.onBind(position)
-            val item: UserEntity = mUserEntity!![position]
-            tv_Id!!.text = item.id.toString()
-            tv_Status!!.text = item.status
-            tv_UserName!!.text = item.name
-            tv_UserEmail!!.text = item.email
-            tv_Gender!!.text = item.gender
+            val item: UserEntity? = mUserEntity?.get(position!!)
+            tv_Id?.text = item?.id.toString()
+            tv_Status?.text = item?.status
+            tv_UserName?.text = item?.name
+            tv_UserEmail?.text = item?.email
+            tv_Gender?.text = item?.gender
 
-            ll_listItem!!.setOnClickListener {
-                itemListener!!.OnItemClick(item)
+            ll_listItem?.setOnClickListener {
+                itemListener?.OnItemClick(item!!)
             }
         }
 
@@ -115,7 +115,7 @@ class UserListAdapter(lsUserEntitys: MutableList<UserEntity>?, itemClickListener
     }
 
     inner class ProgressHolder internal constructor(itemView: View?) :
-        BaseViewHolder(itemView!!) {
+        BaseViewHolder(itemView) {
         override fun clear() {}
 
 

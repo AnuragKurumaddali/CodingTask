@@ -47,7 +47,7 @@ class DetailsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_details)
 
         if(intent.extras != null && intent.hasExtra("UserData")){
-            userEntity = intent.extras!!.get("UserData") as UserEntity?
+            userEntity = intent.extras?.get("UserData") as UserEntity?
         }
         populateData()
         ziv_Image.setZoomViewClickListener(object: ZoomImageView.ZoomViewClick {
@@ -77,11 +77,11 @@ class DetailsActivity : AppCompatActivity() {
 
     private fun populateData(){
         if(userEntity != null){
-            tv_UserId.text = "Id : "+userEntity!!.id.toString()
-            tv_UserName.text = "Name : \n"+userEntity!!.name.toString()
-            tv_UserEmail.text = "E-mail : \n"+userEntity!!.email.toString()
-            tv_UserGender.text = "Gender : "+userEntity!!.gender.toString()
-            tv_UserStatus.text = "Status : "+userEntity!!.status.toString()
+            tv_UserId.text = "Id : "+userEntity?.id.toString()
+            tv_UserName.text = "Name : \n"+userEntity?.name.toString()
+            tv_UserEmail.text = "E-mail : \n"+userEntity?.email.toString()
+            tv_UserGender.text = "Gender : "+userEntity?.gender.toString()
+            tv_UserStatus.text = "Status : "+userEntity?.status.toString()
         }
     }
 
@@ -93,11 +93,11 @@ class DetailsActivity : AppCompatActivity() {
         tv_UserGender.gravity = Gravity.CENTER
         tv_UserStatus.gravity = Gravity.CENTER
         if(userEntity != null){
-            tv_UserId.text = "Id\n"+userEntity!!.id.toString()
-            tv_UserName.text = "Name\n"+userEntity!!.name.toString()
-            tv_UserEmail.text = "E-mail\n"+userEntity!!.email.toString()
-            tv_UserGender.text = "Gender\n"+userEntity!!.gender.toString()
-            tv_UserStatus.text = "Status\n"+userEntity!!.status.toString()
+            tv_UserId.text = "Id\n"+userEntity?.id.toString()
+            tv_UserName.text = "Name\n"+userEntity?.name.toString()
+            tv_UserEmail.text = "E-mail\n"+userEntity?.email.toString()
+            tv_UserGender.text = "Gender\n"+userEntity?.gender.toString()
+            tv_UserStatus.text = "Status\n"+userEntity?.status.toString()
         }
     }
 
@@ -174,15 +174,14 @@ class DetailsActivity : AppCompatActivity() {
             try {
                 ziv_Image.resetImage()
                 btnContinue.isEnabled = true
-                if(Build.VERSION.SDK_INT < 28) {
-                    selectedImageBitmap = MediaStore.Images.Media.getBitmap(
+                selectedImageBitmap = if(Build.VERSION.SDK_INT < 28) {
+                    MediaStore.Images.Media.getBitmap(
                         applicationContext.contentResolver,
                         data.data!!
                     )
-                }
-                else {
+                } else {
                     val source = ImageDecoder.createSource(this.contentResolver, data.data!!)
-                    selectedImageBitmap = ImageDecoder.decodeBitmap(source)
+                    ImageDecoder.decodeBitmap(source)
                 }
                 ziv_Image.setImageBitmap(selectedImageBitmap)
             } catch (e: IOException) {
@@ -250,8 +249,8 @@ class DetailsActivity : AppCompatActivity() {
         }
         else{
             return Bitmap.createBitmap(
-                selectedImageBitmap!!.width,
-                selectedImageBitmap!!.height,
+                selectedImageBitmap?.width!!,
+                selectedImageBitmap?.height!!,
                 Bitmap.Config.ARGB_8888
             ).apply {
                 Canvas(this).apply {
@@ -264,7 +263,7 @@ class DetailsActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     fun getBitmapAboveO(view: View, bitmapCallback: (Bitmap)->Unit) : Bitmap{
         // Above Android O, use PixelCopy
-        val bitmap = Bitmap.createBitmap(selectedImageBitmap!!.width, selectedImageBitmap!!.height, Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(selectedImageBitmap?.width!!, selectedImageBitmap?.height!!, Bitmap.Config.ARGB_8888)
         val location = IntArray(2)
         view.getLocationInWindow(location)
         PixelCopy.request(window,

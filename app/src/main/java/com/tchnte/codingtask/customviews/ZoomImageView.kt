@@ -160,10 +160,10 @@ class ZoomImageView : ImageView, OnTouchListener {
     }
 
     override fun onTouch(v: View, event: MotionEvent): Boolean {
-        return if (gestureDetector!!.onTouchEvent(event)) {
+        return if (gestureDetector?.onTouchEvent(event)!!) {
             // single tap
             Log.e("aaa", "Clicked")
-            if (zoomViewClick != null) zoomViewClick!!.onClicked()
+            if (zoomViewClick != null) zoomViewClick?.onClicked()
             false
         } else {
             when (event.action and MotionEvent.ACTION_MASK) {

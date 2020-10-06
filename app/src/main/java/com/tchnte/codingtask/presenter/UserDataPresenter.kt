@@ -15,11 +15,11 @@ class UserDataPresenter(var view: MainActivity) {
         pageNum: Int
     ) {
 
-        val apiService = ApiClient.client!!.create(ApiInterface::class.java)
+        val apiService = ApiClient.client?.create(ApiInterface::class.java)
 
-        apiService.getUsersList(pageNum).subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<UserDataResponseDO> {
+        apiService?.getUsersList(pageNum)?.subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(object : Observer<UserDataResponseDO> {
                 override fun onComplete() {
                 }
 

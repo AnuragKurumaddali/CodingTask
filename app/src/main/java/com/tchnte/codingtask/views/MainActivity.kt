@@ -28,9 +28,9 @@ class MainActivity : AppCompatActivity(),UserDataPresenter.UserDataPresenterInte
 
     private var currentPage: Int = 1
     private var is_LastPage = false
-    private var totalPage: Long = 0
+    private var totalPage: Long? = 0
     private var is_Loading = false
-    private var page_Size: Long = 0
+    private var page_Size: Long? = 0
     private val progressDialog = CustomProgressDialog()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,16 +40,16 @@ class MainActivity : AppCompatActivity(),UserDataPresenter.UserDataPresenterInte
         showProgressBar()
         initControls()
 
-        fab!!.setOnClickListener { view ->
+        fab?.setOnClickListener { view ->
             var intent = Intent(this, AddNewUserActivity::class.java)
             startActivity(intent)
         }
 
-        rv_List!!.addOnScrollListener(object : PaginationListener(rv_List!!.layoutManager as LinearLayoutManager) {
+        rv_List?.addOnScrollListener(object : PaginationListener(rv_List?.layoutManager as LinearLayoutManager) {
             override fun loadMoreItems() {
                 is_Loading = true
                 currentPage++
-                userDataPresenter!!.getUserInfo(currentPage)
+                userDataPresenter?.getUserInfo(currentPage)
             }
 
             override val isLastPage: Boolean
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity(),UserDataPresenter.UserDataPresenterInte
                 get() = is_Loading
 
             override var pageSize: Long
-                get() = page_Size
+                get() = page_Size!!
                 set(value) {page_Size}
         })
 
@@ -68,40 +68,40 @@ class MainActivity : AppCompatActivity(),UserDataPresenter.UserDataPresenterInte
     private fun initControls(){
         userList = ArrayList()
         userAdapter = UserListAdapter(userList!!, object : ItemClickListener {
-            override fun OnItemClick(userEntity: UserEntity) {
+            override fun OnItemClick(userEntity: UserEntity?) {
                 var intent = Intent(applicationContext, DetailsActivity::class.java)
                 intent.putExtra("UserData",userEntity)
                 startActivity(intent)
             }
         })
-        rv_List!!.layoutManager = LinearLayoutManager(this)
-        rv_List!!.adapter = userAdapter
+        rv_List?.layoutManager = LinearLayoutManager(this)
+        rv_List?.adapter = userAdapter
         userDataPresenter = UserDataPresenter(this)
-        userDataPresenter!!.getUserInfo(1)
+        userDataPresenter?.getUserInfo(1)
     }
 
     override fun onSuccess(userDataResponseDO: UserDataResponseDO) {
-        if (currentPage != 1) userAdapter!!.removeLoading()
-        userAdapter!!.addItems(userDataResponseDO.data)
-        prepareDatabaseEntity(userDataResponseDO.data!!)
-        totalPage = userDataResponseDO.meta!!.pagination!!.pages!!
-        page_Size = userDataResponseDO.meta!!.pagination!!.limit!!
+        if (currentPage != 1) userAdapter?.removeLoading()
+        userAdapter?.addItems(userDataResponseDO.data)
+        prepareDatabaseEntity(userDataResponseDO.data)
+        totalPage = userDataResponseDO.meta?.pagination?.pages
+        page_Size = userDataResponseDO.meta?.pagination?.limit
         // check weather is last page or not
-        if (currentPage < totalPage) {
-            userAdapter!!.addLoading()
+        if (currentPage < totalPage!!) {
+            userAdapter?.addLoading()
         } else {
             is_LastPage = true
         }
         is_Loading = false
         hideProgressBar()
-        rv_List!!.visibility = View.VISIBLE
-        tv_NoData!!.visibility = View.GONE
+        rv_List?.visibility = View.VISIBLE
+        tv_NoData?.visibility = View.GONE
     }
 
     override fun onFailure(message: String?) {
         hideProgressBar()
-        rv_List!!.visibility = View.GONE
-        tv_NoData!!.visibility = View.VISIBLE
+        rv_List?.visibility = View.GONE
+        tv_NoData?.visibility = View.VISIBLE
     }
 
     private fun initializeDB() {
@@ -109,19 +109,19 @@ class MainActivity : AppCompatActivity(),UserDataPresenter.UserDataPresenterInte
             .allowMainThreadQueries().build()
     }
 
-    private fun prepareDatabaseEntity(lsUserEntity: List<UserEntity>) {
+    private fun prepareDatabaseEntity(lsUserEntity: List<UserEntity>?) {
 
         Thread(Runnable {
-            for (userEntity in lsUserEntity) {
-                var lsEntity =  database!!.getUserDao().getUserById(userEntity.id)
-                if (lsEntity.isEmpty()) {
-                    var effectedRowsCount = database!!.getUserDao().insert(userEntity)
-                    if (!effectedRowsCount.equals(0))
+            for (userEntity in lsUserEntity!!) {
+                var lsEntity =  database?.getUserDao()?.getUserById(userEntity.id)
+                if (lsEntity?.isEmpty()!!) {
+                    var effectedRowsCount = database?.getUserDao()?.insert(userEntity)
+                    if (!effectedRowsCount?.equals(0)!!)
                         Log.e("aaa","Inserted "+userEntity.id)
 
                 } else {
-                    var effectedRowsCount = database!!.getUserDao().update(userEntity)
-                    if (!effectedRowsCount.equals(0))
+                    var effectedRowsCount = database?.getUserDao()?.update(userEntity)
+                    if (!effectedRowsCount?.equals(0)!!)
                         Log.e("aaa","Updated "+userEntity.id)
                 }
             }
